@@ -1,197 +1,169 @@
-# 🐞 Issue & Bug Tracker
+# Traceflow
 
-A full-stack, real-time issue and project management platform built for engineering teams. It streamlines the lifecycle of bugs and feature requests — from creation, triage, and assignment through resolution, with live collaboration over WebSockets, role-based access control, file attachments, threaded comments, and an administrative dashboard.
+**Traceflow** is a self-hosted, full-stack issue and bug tracking platform built with Laravel 13 and Vue 3. It helps engineering teams plan, track, and resolve work with structured workflows, agile boards, real-time collaboration, role-based access control, and complete auditability.
 
----
+[![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20.svg)](https://laravel.com)
+[![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D.svg)](https://vuejs.org)
+[![PHP](https://img.shields.io/badge/PHP-8.3-777BB4.svg)](https://php.net)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF.svg)](https://vitejs.dev)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 📑 Table of Contents
+## Table of Contents
 
-- [🐞 Issue \& Bug Tracker](#-issue--bug-tracker)
-  - [📑 Table of Contents](#-table-of-contents)
-  - [🔭 Overview](#-overview)
-  - [✨ Key Features](#-key-features)
-    - [Project \& Issue Management](#project--issue-management)
-    - [Authentication \& Authorization](#authentication--authorization)
-    - [Real-Time Collaboration](#real-time-collaboration)
-    - [Dashboards \& Auditability](#dashboards--auditability)
-    - [Frontend Experience](#frontend-experience)
-  - [🧱 Tech Stack](#-tech-stack)
-  - [🏛 System Architecture](#-system-architecture)
-  - [📁 Repository Structure](#-repository-structure)
-  - [✅ Prerequisites](#-prerequisites)
-  - [⚙️ Installation \& Local Setup](#️-installation--local-setup)
-    - [1. Clone the repository](#1-clone-the-repository)
-    - [2. Backend setup](#2-backend-setup)
-    - [3. Frontend setup](#3-frontend-setup)
-  - [🔐 Environment Configuration](#-environment-configuration)
-    - [`backend/.env` (key entries)](#backendenv-key-entries)
-    - [`frontend/.env`](#frontendenv)
-  - [▶️ Running the Application](#️-running-the-application)
-    - [Production build](#production-build)
-  - [📡 API Reference](#-api-reference)
-    - [Authentication](#authentication)
-    - [Users \& Profile](#users--profile)
-    - [Projects \& Members](#projects--members)
-    - [Issues](#issues)
-    - [Comments](#comments)
-    - [Attachments](#attachments)
-    - [Dashboard, Notifications \& Activity](#dashboard-notifications--activity)
-    - [Example request](#example-request)
-  - [🧬 Domain Model](#-domain-model)
-  - [🔄 Real-Time Events](#-real-time-events)
-  - [🛣 Roadmap](#-roadmap)
-  - [🤝 Contributing](#-contributing)
-  - [📄 License](#-license)
-  - [👤 Author](#-author)
+- [Overview](#overview)
+- [Screenshots](#screenshots)
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Getting Started](#getting-started)
+- [Environment Configuration](#environment-configuration)
+- [Running the Application](#running-the-application)
+- [Usage](#usage)
+- [API Reference](#api-reference)
+- [Real-Time Events](#real-time-events)
+- [Permissions & Roles](#permissions--roles)
+- [Data Model](#data-model)
+- [Testing & Code Quality](#testing--code-quality)
+- [Security](#security)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
 
----
+## Overview
 
-## 🔭 Overview
+Traceflow brings structured issue tracking, agile project management, and team collaboration into one self-hosted application. Designed as an alternative to tools like Jira, Linear, and Bugzilla, it focuses on clarity, accountability, and real-time visibility across your engineering workflow.
 
-The **Issue & Bug Tracker** is a self-hosted alternative to commercial tools such as Jira, Linear, and Bugzilla. It is designed around three guiding principles:
+Whether you're triaging bugs, planning sprints, or tracking feature requests, Traceflow provides the structure and audit trail needed to keep work organized from report to resolution.
 
-1. **Clarity** — every issue carries structured metadata (type, severity, priority, status) so triage is unambiguous.
-2. **Collaboration** — comments, attachments, mentions, and notifications are first-class concepts, not afterthoughts.
-3. **Insight** — every state transition is recorded as an auditable activity log, surfaced through a dashboard for managers.
+## Screenshots
 
-The application is composed of a **Laravel 13 REST API** and a **Vue 3 single-page application**. Real-time updates are delivered via **Laravel Reverb** (WebSocket server) using the official [Laravel Echo](https://laravel.com/docs/broadcasting) client.
+### Authentication
+![Traceflow Login](docs/screenshots/login.png)
 
----
+### Dashboard
+![Traceflow Dashboard](docs/screenshots/dashboard.png)
 
-## ✨ Key Features
+### Projects
+![Traceflow Projects](docs/screenshots/projects.png)
+
+### Issue Tracking
+![Traceflow Issues List](docs/screenshots/issues.png)
+
+### Issue Details
+![Traceflow Issue Details](docs/screenshots/issue-details.png)
+
+### Kanban Board
+![Traceflow Kanban Board](docs/screenshots/board.png)
+
+### Backlog & Sprints
+![Traceflow Backlog and Sprints](docs/screenshots/backlog-sprint.png)
+
+### Analytics & Insights
+![Traceflow Analytics](docs/screenshots/analytics.png)
+
+### Activity Logs
+![Traceflow Activity Logs](docs/screenshots/activity-logs.png)
+
+### Roles & Permissions
+![Traceflow Roles and Permissions](docs/screenshots/roles-permissions.png)
+
+## Key Features
 
 ### Project & Issue Management
-- Full CRUD lifecycle for **projects**, **issues**, **comments**, and **attachments**.
-- Structured issue metadata via PHP 8.1+ backed enums:
-  `IssueType` (Bug, Feature, Task, Improvement), `IssueStatus`, `Priority`, `Severity`.
-- Business actions distinct from generic updates: `assign`, `changeStatus`, `reopen`, `close`.
-- Project membership with role-aware access control (admin, manager, developer, reporter).
-- Soft deletes and Eloquent API Resources for consistent JSON shaping.
+- **Structured Issues** – Track bugs, features, tasks, and improvements with type, priority, severity, and status.
+- **Workflow Engine** – Enforced state transitions with full status history and validation.
+- **Agile Planning** – Kanban board, product backlog, and sprint management (start, complete, or cancel).
+- **Issue Relationships** – Link related issues, apply labels, watch issues, and manage assignees.
+- **Auto-Generated Keys** – Every issue receives a readable key (e.g., `ISS-{id}`) on creation.
+- **Project Membership** – Organize teams with project-scoped access and roles.
 
-### Authentication & Authorization
-- Token-based authentication using **Laravel Sanctum**.
-- Admin-only user management (create, update, deactivate) with role/status enums.
-- Per-user profile management (`GET /user/profile`, `PUT /user/profile`).
+### Collaboration & Communication
+- **Threaded Comments** – Discuss issues with a full, traceable comment history.
+- **File Attachments** – Upload, preview, and download files directly on issues.
+- **Real-Time Updates** – Stay in sync with live updates via Laravel Reverb WebSockets.
+- **In-App Notifications** – Get notified on assignments, comments, status changes, and mentions.
+- **Activity Tracking** – Every action is recorded in an immutable audit trail.
 
-### Real-Time Collaboration
-- **Laravel Reverb** WebSocket server with private and presence channels.
-- Live broadcasts for: `IssueCreated`, `IssueUpdated`, `IssueAssigned`, `IssueStatusChanged`, `CommentCreated`, `AttachmentUploaded`, `AttachmentDeleted`, `NotificationCreated`, `ActivityLogged`.
-- In-app inbox with unread badge, mark-as-read, and mark-all-as-read.
+### Security & Access Control
+- **Authentication** – Secure token-based auth powered by Laravel Sanctum.
+- **Role-Based Access** – Granular permissions via Spatie Laravel Permission.
+- **Policy Enforcement** – Resource-level authorization for projects, issues, comments, and more.
+- **User Management** – Admin controls for users, roles, and permissions.
 
-### Dashboards & Auditability
-- Aggregated dashboard endpoint with project, issue, and activity statistics.
-- Full **activity log** of every domain mutation, exposed via `GET /activity-logs`.
-- Centralized `ActivityLogService` writes one row per business event with actor, target, and payload.
+### Integrations & Automation
+- **GitHub Integration** – Link repositories, pull requests, and commits to issues.
+- **Automation Rules** – Define triggers and actions to automate repetitive workflows.
+- **AI-Assisted Insights** – Get AI-powered bug report analysis and project insights via the Laravel AI SDK.
+- **Signed Webhooks** – Secure GitHub webhook ingestion with HMAC verification.
 
-### Frontend Experience
-- Responsive SPA built on **Vue 3** (Composition API), **Vite 6**, and **TailAdmin Vue**.
-- Rich component set: charts (ApexCharts), drag-and-drop Kanban (`vue-kanban`, `vuedraggable`), calendar (FullCalendar), data tables, file uploader (Dropzone).
-- **Pinia** stores, **Vue Router 4** with route guards, **SweetAlert2** confirmations, **VueUse** utilities, dark mode.
+### Analytics & Reporting
+- **Interactive Dashboard** – At-a-glance view of projects, issues, and team activity.
+- **Project Analytics** – Track issue trends, workload distribution, and resolution metrics.
+- **Audit Logs** – Full visibility into who did what and when across the system.
 
----
+## Tech Stack
 
-## 🧱 Tech Stack
+| Layer | Technologies |
+| --- | --- |
+| **Backend** | PHP 8.3, Laravel 13, Laravel Sanctum, Laravel Reverb, Spatie Laravel Permission, Laravel AI SDK |
+| **Frontend** | Vue 3.5 (Composition API), Vite 6, Vue Router 4, Pinia 2, TypeScript, Tailwind CSS 4 |
+| **UI Components** | PrimeVue 4, TailAdmin Vue, ApexCharts, vue3-apexcharts, vuedraggable |
+| **Real-Time** | Laravel Echo, Pusher JS |
+| **Database** | SQLite (default for local dev), MySQL, PostgreSQL |
+| **Tooling** | Composer, npm, Laravel Pint, ESLint, Prettier, PHPUnit 12 |
 
-| Layer            | Technology                                                                                     |
-| ---------------- | ---------------------------------------------------------------------------------------------- |
-| Backend          | PHP 8.3 · Laravel 13 · Laravel Sanctum 4 · Laravel Reverb 1 · PHPUnit 12                        |
-| Frontend         | Vue 3.5 · Vite 6 · Vue Router 4 · Pinia 2 · Tailwind CSS 4 · TypeScript · ApexCharts · PrimeVue |
-| Realtime         | Laravel Echo · Pusher protocol over WebSockets (Reverb)                                        |
-| Database         | SQLite (default) · MySQL/PostgreSQL supported                                                  |
-| Auth             | Laravel Sanctum bearer tokens                                                                  |
-| Tooling          | Composer · npm · ESLint · Prettier · Laravel Pint                                              |
+## Architecture
 
----
-
-## 🏛 System Architecture
-
-```
-                ┌───────────────────────────┐
-                │      Vue 3 SPA (Vite)     │
-                │  TailAdmin · Pinia · Axios│
-                └──────┬───────────┬────────┘
-                       │ HTTPS     │ WebSocket (Reverb)
-                       │           ▼
-┌──────────────────────────┐   ┌──────────────────────┐
-│  Laravel REST API        │   │  Laravel Reverb      │
-│  Sanctum Auth · Services │◄──┤  Broadcast Server    │
-│  Eloquent ORM · Events   │   └──────────────────────┘
-└──────────┬───────────────┘
-           ▼
-      ┌─────────────┐
-      │  Database   │   SQLite / MySQL / PostgreSQL
-      └─────────────┘
-```
-
-- The API is **stateless** and uses bearer tokens; each request to a protected route passes through `auth:sanctum`.
-- **Service classes** (`IssueService`, `ProjectService`, `CommentService`, `NotificationService`, `ActivityLogService`, `AttachmentService`, `ProjectMemberService`, `UserService`) own the business logic; controllers remain thin.
-- **Events** are dispatched from services and broadcast on private channels; the frontend subscribes via `laravel-echo`.
-
----
-
-## 📁 Repository Structure
-
-```
-issue-bug-tracker/
-├── backend/                 # Laravel 13 API
-│   ├── app/
-│   │   ├── Enums/           # PHP backed enums (IssueType, Priority, etc.)
-│   │   ├── Events/          # Broadcastable domain events
-│   │   ├── Http/
-│   │   │   ├── Controllers/Api/
-│   │   │   ├── Requests/    # Form requests (validation)
-│   │   │   └── Resources/   # JSON resources
-│   │   ├── Models/          # Eloquent models
-│   │   ├── Notifications/   # SystemNotification
-│   │   └── Services/        # Business logic layer
-│   ├── database/            # Migrations, seeders, factories
-│   ├── routes/
-│   │   ├── api.php          # All API endpoints
-│   │   └── channels.php     # Broadcast channel auth
-│   ├── config/
-│   └── public/              # Web root (index.php)
-│
-├── frontend/                # Vue 3 SPA
-│   ├── src/
-│   │   ├── views/           # Admin / Auth / Pages / Tables / Charts / Forms
-│   │   ├── components/      # Reusable UI (issues, comments, attachments, …)
-│   │   ├── stores/          # Pinia stores
-│   │   ├── services/        # Axios API + realtime (Echo) wrappers
-│   │   ├── router/          # Vue Router 4 with guards
-│   │   └── composables/     # Reusable composition functions
-│   └── vite.config.js
-│
-└── readme.md                # You are here
+```text
+┌─────────────────────────────────┐
+│           Vue 3 SPA             │
+│   Pinia • Vue Router • Axios    │
+└─────────────┬─────────┬─────────┘
+              │ REST     │ WebSocket
+              │           │ (Laravel Reverb)
+              ▼           ▼
+        ┌─────────────────────────┐   ┌─────────────────┐
+        │      Laravel API        │   │  Laravel Reverb │
+        │  Sanctum • Policies     │   │ Broadcast Server│
+        │  Services • Events      │   └─────────────────┘
+        └───────────┬─────────────┘
+                    │ Dispatches Events
+                    ▼
+                ┌───────────┐   ┌───────────┐
+                │  Database  │   │    Queue   │
+                │ SQLite/MySQL│   │   Worker   │
+                │ PostgreSQL  │   │ (optional) │
+                └───────────┘   └───────────┘
 ```
 
----
+- **Thin Controllers** – HTTP layer delegates to service classes that encapsulate business logic.
+- **Event-Driven** – Domain actions dispatch events that are broadcast to authorized private channels.
+- **Service Layer** – Core operations live in dedicated services (`IssueService`, `ProjectService`, `WorkflowService`, etc.).
+- **Queue-Aware** – Notifications and broadcasts can be queued for better performance in production.
 
-## ✅ Prerequisites
+## Getting Started
 
-Before installing, make sure your machine has:
+### Prerequisites
 
-| Tool   | Version           | Notes                                  |
-| ------ | ----------------- | -------------------------------------- |
-| PHP    | **≥ 8.3**         | With `pdo_sqlite` / `pdo_mysql`        |
-| Composer | **≥ 2.x**      |                                        |
-| Node   | **≥ 18.x** (20 LTS recommended) | npm ships with Node |
-| SQLite | bundled with PHP  | default; swap for MySQL/Postgres if needed |
-| Git    | latest            |                                        |
+| Tool | Version | Notes |
+| --- | --- | --- |
+| [PHP](https://php.net) | ≥ 8.3 | Extensions: `pdo`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json` |
+| [Composer](https://getcomposer.org) | ≥ 2.x | PHP dependency manager |
+| [Node.js](https://nodejs.org) | ≥ 18.x (20 LTS recommended) | JavaScript runtime |
+| [npm](https://www.npmjs.com) | Included with Node.js | Package manager |
+| [Git](https://git-scm.com) | Latest | Version control |
 
-> **Tip (Windows):** install PHP via [Herd](https://herd.laravel.com) or [Laragon](https://laragon.org) for the smoothest setup.
+### Installation
 
----
-
-## ⚙️ Installation & Local Setup
-
-### 1. Clone the repository
+#### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/alsakib748/issue-bug-tracker.git
 cd issue-bug-tracker
 ```
 
-### 2. Backend setup
+#### 2. Backend Setup
 
 ```bash
 cd backend
@@ -199,269 +171,273 @@ cd backend
 # Install PHP dependencies
 composer install
 
-# Create environment file and generate application key
+# Copy environment file and generate app key
 cp .env.example .env
 php artisan key:generate
 
-# Create SQLite database file and run migrations
+# Create SQLite database (default)
 touch database/database.sqlite
-php artisan migrate --seed
 
-# (Optional) install JS dependencies if you plan to build frontend assets here
-npm install
+# Run migrations and seed default data
+php artisan migrate --seed
 ```
 
-### 3. Frontend setup
+#### 3. Frontend Setup
 
 ```bash
 cd ../frontend
 
-# Install JS dependencies
+# Install Node dependencies
 npm install
 ```
 
----
+## Environment Configuration
 
-## 🔐 Environment Configuration
+### Backend (`backend/.env`)
 
-### `backend/.env` (key entries)
+Update these key values for local development:
 
 ```dotenv
-APP_NAME="Issue Bug Tracker"
+APP_NAME="Traceflow"
 APP_ENV=local
 APP_URL=http://localhost:8000
+APP_DEBUG=true
 
-DB_CONNECTION=sqlite          # or mysql / pgsql
+DB_CONNECTION=sqlite
 
 SESSION_DRIVER=database
 QUEUE_CONNECTION=database
-BROADCAST_CONNECTION=reverb   # enables Reverb broadcasting
+BROADCAST_CONNECTION=reverb
 
-# Laravel Reverb (WebSocket server)
-REVERB_APP_ID=issue-tracker
-REVERB_APP_KEY=pdhydnsdcbmqawzt5zse
-REVERB_APP_SECRET=<generate-a-strong-secret>
-REVERB_HOST="localhost"
+# Laravel Reverb (WebSocket Server)
+REVERB_APP_ID=traceflow
+REVERB_APP_KEY=your-app-key
+REVERB_APP_SECRET=your-app-secret
+REVERB_HOST=localhost
 REVERB_PORT=8080
 REVERB_SCHEME=http
 
-# Frontend origin for CORS / Sanctum
+# CORS / Sanctum
 SANCTUM_STATEFUL_DOMAINS=localhost:5173
 FRONTEND_URL=http://localhost:5173
+
+# AI (Optional)
+AI_PROVIDER=gemini
+AI_MODEL=gemini-3.6-flash
+GEMINI_API_KEY=
 ```
 
-### `frontend/.env`
+> Generate secure Reverb credentials with `php artisan reverb:install` if needed. Never commit real secrets to version control.
+
+### Frontend (`frontend/.env`)
+
+Create a `.env` file in the `frontend/` directory:
 
 ```dotenv
 VITE_API_URL=http://localhost:8000/api
 VITE_BACKEND_URL=http://localhost:8000
 
-VITE_REVERB_APP_KEY=pdhydnsdcbmqawzt5zse
+VITE_REVERB_APP_KEY=your-app-key
 VITE_REVERB_HOST=localhost
 VITE_REVERB_PORT=8080
 VITE_REVERB_SCHEME=http
 ```
 
-> Regenerate `REVERB_APP_SECRET` with `php artisan reverb:install` and never commit secrets to source control.
+Ensure `VITE_REVERB_APP_KEY` matches `REVERB_APP_KEY` from your backend configuration.
 
----
+## Running the Application
 
-## ▶️ Running the Application
+Traceflow requires multiple services during development. Open four separate terminals from the project root:
 
-You will need **four** terminal windows during development.
+| Terminal | Directory | Command | Purpose |
+| --- | --- | --- | --- |
+| 1 | `backend/` | `php artisan serve` | REST API at `http://localhost:8000` |
+| 2 | `backend/` | `php artisan queue:listen` | Processes queued jobs (recommended for notifications) |
+| 3 | `backend/` | `php artisan reverb:start` | WebSocket server at `ws://localhost:8080` |
+| 4 | `frontend/` | `npm run dev` | Vite dev server at `http://localhost:5173` |
 
-| # | Terminal | Command                          | Purpose                         |
-| - | -------- | -------------------------------- | ------------------------------- |
-| 1 | backend  | `php artisan serve`              | HTTP API on `:8000`             |
-| 2 | backend  | `php artisan queue:listen`       | Process queued jobs             |
-| 3 | backend  | `php artisan reverb:start`       | WebSocket server on `:8080`     |
-| 4 | frontend | `npm run dev`                    | Vite dev server on `:5173`      |
+Once all services are running, open [http://localhost:5173](http://localhost:5173) in your browser.
 
-Open **<http://localhost:5173>** in your browser. The default admin seeded by migrations can be overridden in `database/seeders/`.
-
-### Production build
+### Production Build
 
 ```bash
-# Backend
+# Optimize backend
 cd backend
 php artisan config:cache
 php artisan route:cache
+php artisan view:cache
 php artisan optimize
 
-# Frontend
+# Build frontend
 cd ../frontend
-npm run build       # outputs to dist/
+npm run build
 ```
 
----
+Serve `backend/public` via your web server and deploy the contents of `frontend/dist/` as your SPA assets. Configure queues and Reverb as system services in production.
 
-## 📡 API Reference
+## Usage
 
-All routes are prefixed with `/api` and require a `Bearer` token unless noted. See [`backend/routes/api.php`](backend/routes/api.php) for the canonical definition.
+### Default Account
 
-### Authentication
+If the database was seeded with `php artisan migrate --seed`, check the seeders in `backend/database/seeders/` for the default administrator credentials. Use those credentials to log in on first run.
 
-| Method | Endpoint      | Auth | Description                  |
-| ------ | ------------- | ---- | ---------------------------- |
-| POST   | `/login`      | —    | Issue a Sanctum token        |
-| POST   | `/logout`     | ✔    | Revoke the current token     |
-| GET    | `/user`       | ✔    | Authenticated user details   |
+### Core Workflow
 
-### Users & Profile
+1. **Create a Project** – Set up your workspace and invite team members.
+2. **Report Issues** – Create bugs, tasks, or feature requests with proper metadata.
+3. **Triage & Assign** – Prioritize work and assign issues to team members.
+4. **Plan with Sprints** – Organize work in the backlog or move items to active sprints.
+5. **Track Progress** – Use the Kanban board to move issues through your workflow.
+6. **Collaborate** – Comment, attach files, and stay updated in real time.
+7. **Close & Review** – Resolve issues, review activity logs, and track metrics in analytics.
 
-| Method | Endpoint           | Description              |
-| ------ | ------------------ | ------------------------ |
-| GET    | `/users`           | List users (admin)       |
-| POST   | `/users`           | Create user (admin)      |
-| GET    | `/users/{user}`    | Show user                |
-| PUT    | `/users/{user}`    | Update user              |
-| DELETE | `/users/{user}`    | Delete user              |
-| GET    | `/user/profile`    | Current user's profile   |
-| PUT    | `/user/profile`    | Update own profile       |
+## API Reference
 
-### Projects & Members
+All API routes are prefixed with `/api`. Protected routes require authentication via Laravel Sanctum. For the complete and up-to-date route definitions, refer to [`backend/routes/api.php`](backend/routes/api.php).
 
-| Method | Endpoint                                  | Description                |
-| ------ | ----------------------------------------- | -------------------------- |
-| GET    | `/projects`                               | List projects              |
-| POST   | `/projects`                               | Create project             |
-| GET    | `/projects/{project}`                     | Show project               |
-| PUT    | `/projects/{project}`                     | Update project             |
-| DELETE | `/projects/{project}`                     | Delete project             |
-| GET    | `/projects/{project}/members`             | List members               |
-| POST   | `/projects/{project}/members`             | Add member                 |
-| DELETE | `/projects/{project}/members/{user}`      | Remove member              |
-| GET    | `/projects/{project}/members/available`   | Eligible candidates        |
+### Key Endpoints
 
-### Issues
+| Category | Endpoints | Notes |
+| --- | --- | --- |
+| **Auth** | `POST /login`, `POST /logout`, `GET /user`, `GET /me/permissions` | Sanctum-based authentication |
+| **Users** | `GET/POST /users`, `GET/PUT/DELETE /users/{user}`, `GET/PUT /user/profile` | User and profile management |
+| **Projects** | `GET/POST /projects`, `GET/PUT/DELETE /projects/{project}`, member management routes | Project CRUD and membership |
+| **Issues** | `GET/POST /issues`, `GET/PUT/DELETE /issues/{issue}`, transitions, assign, status actions | Core issue operations |
+| **Comments** | `GET/POST /issues/{issue}/comments`, `PUT/DELETE /comments/{comment}` | Issue discussions |
+| **Attachments** | `GET/POST /issues/{issue}/attachments`, `GET /attachments/{attachment}/download`, `DELETE /attachments/{attachment}` | File handling |
+| **Agile** | `GET /board`, `GET /backlog`, Sprint CRUD endpoints | Kanban, backlog, and sprints |
+| **System** | `GET /dashboard`, `GET/POST/PATCH/DELETE /notifications/*`, `GET /activity-logs/*` | Dashboard, notifications, and audit logs |
+| **Integrations** | `POST /webhooks/github`, AI and automation endpoints | GitHub webhooks and automation |
 
-| Method | Endpoint                          | Description                       |
-| ------ | --------------------------------- | --------------------------------- |
-| GET    | `/issues`                         | List / filter issues              |
-| POST   | `/issues`                         | Create issue                      |
-| GET    | `/issues/{issue}`                 | Show issue                        |
-| PUT    | `/issues/{issue}`                 | Update issue                      |
-| DELETE | `/issues/{issue}`                 | Delete issue                      |
-| PATCH  | `/issues/{issue}/assign`          | Assign / reassign                 |
-| PATCH  | `/issues/{issue}/status`          | Change status                     |
-| PATCH  | `/issues/{issue}/reopen`          | Reopen closed issue               |
-| PATCH  | `/issues/{issue}/close`           | Close issue                       |
-
-### Comments
-
-| Method | Endpoint                          | Description         |
-| ------ | --------------------------------- | ------------------- |
-| GET    | `/issues/{issue}/comments`        | List comments       |
-| POST   | `/issues/{issue}/comments`        | Add comment         |
-| PUT    | `/comments/{comment}`             | Edit comment        |
-| DELETE | `/comments/{comment}`             | Delete comment      |
-
-### Attachments
-
-| Method | Endpoint                                       | Description        |
-| ------ | ---------------------------------------------- | ------------------ |
-| GET    | `/issues/{issue}/attachments`                  | List attachments   |
-| POST   | `/issues/{issue}/attachments`                  | Upload file        |
-| GET    | `/attachments/{attachment}/download`           | Download file      |
-| DELETE | `/attachments/{attachment}`                    | Remove attachment  |
-
-### Dashboard, Notifications & Activity
-
-| Method | Endpoint                              | Description                       |
-| ------ | ------------------------------------- | --------------------------------- |
-| GET    | `/dashboard`                          | Aggregated stats                  |
-| GET    | `/notifications`                      | List notifications                |
-| PATCH  | `/notifications/{id}/read`            | Mark as read                      |
-| PATCH  | `/notifications/read-all`             | Mark all as read                  |
-| DELETE | `/notifications/{id}`                 | Delete notification               |
-| GET    | `/activity-logs`                      | Audit log                         |
-| GET    | `/activity-logs/{activityLog}`        | Single log entry                  |
-
-### Example request
+### Example Request
 
 ```bash
 curl -X POST http://localhost:8000/api/login \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@example.com","password":"password"}'
+  -d '{"email":"your-email@example.com","password":"your-password"}'
 ```
 
----
+## Real-Time Events
 
-## 🧬 Domain Model
+Traceflow uses Laravel Reverb to broadcast domain events over private channels. Channel authorization is defined in [`backend/routes/channels.php`](backend/routes/channels.php).
 
-| Entity         | Purpose                                                        |
-| -------------- | -------------------------------------------------------------- |
-| `User`         | Account, role (`UserRole`), status (`UserStatus`)              |
-| `Project`      | Container for issues, status (`ProjectStatus`), members        |
-| `ProjectMember`| Join table — user ↔ project with role                          |
-| `Issue`        | Type, status, priority, severity; belongs to project & assignee |
-| `Comment`      | Threaded discussion on an issue                                |
-| `Attachment`   | File metadata; uploaded against an issue                       |
-| `Notification` | Per-user inbox entries generated by system events              |
-| `ActivityLog`  | Append-only audit trail of every domain mutation               |
+| Event | Trigger | Channel(s) |
+| --- | --- | --- |
+| `IssueCreated` | New issue created | `project.{projectId}`, `issue.{issueId}` |
+| `IssueUpdated` | Issue details updated | `project.{projectId}`, `issue.{issueId}` |
+| `IssueAssigned` | Assignee changed | `project.{projectId}`, `issue.{issueId}`, `user.{assigneeId}` |
+| `IssueStatusChanged` | Status transitioned/reopened/closed | `project.{projectId}`, `issue.{issueId}` |
+| `CommentCreated` | Comment added to issue | `issue.{issueId}`, `project.{projectId}` |
+| `AttachmentUploaded` | File attached to issue | `issue.{issueId}`, `project.{projectId}` |
+| `AttachmentDeleted` | File removed from issue | `issue.{issueId}`, `project.{projectId}` |
+| `NotificationCreated` | Notification generated | `user.{userId}` |
+| `ActivityLogged` | Auditable action recorded | `project.{projectId}` |
 
----
+## Permissions & Roles
 
-## 🔄 Real-Time Events
+Permissions are managed with Spatie Laravel Permission. Default roles typically include:
 
-All events are broadcast on the private channel `issues.{id}` (or `App.Models.User.{id}` for personal notifications) via Laravel Reverb.
+| Role | Access Level |
+| --- | --- |
+| **Admin** | Full system access including user, role, and permission management |
+| **Project Manager** | Manage projects, members, sprints, and workflows |
+| **Developer** | Work on assigned issues, comment, update statuses, and manage attachments |
+| **QA Tester** | Report, verify, and test issues across projects |
+| **Reporter** | Create and track issues within accessible projects |
+| **Viewer** | Read-only access to assigned projects and issues |
 
-| Event                 | Trigger                                  |
-| --------------------- | ---------------------------------------- |
-| `IssueCreated`        | A new issue is filed                      |
-| `IssueUpdated`        | Issue fields change                      |
-| `IssueAssigned`       | Assignee changes                         |
-| `IssueStatusChanged`  | Status transitions (incl. reopen/close)  |
-| `CommentCreated`      | A comment is posted                      |
-| `AttachmentUploaded`  | A file is attached                       |
-| `AttachmentDeleted`   | A file is removed                        |
-| `NotificationCreated` | A notification is generated              |
-| `ActivityLogged`      | Any audited action occurred              |
+Actual permissions may vary based on your seeded roles. Check `backend/database/seeders/` for the exact configuration.
 
-Channel authorization lives in [`backend/routes/channels.php`](backend/routes/channels.php) and gates every subscription to authenticated participants.
+## Data Model
 
----
+Core entities in Traceflow:
 
-## 🛣 Roadmap
+| Entity | Purpose |
+| --- | --- |
+| `User` | Accounts with roles, permissions, and status |
+| `Project` | Workspaces containing issues, members, and sprints |
+| `ProjectMember` | Project-user relationship with role assignment |
+| `Issue` | Work items with metadata, assignee, reporter, and workflow state |
+| `IssueStatusHistory` | Complete history of status transitions |
+| `Comment` | Threaded discussions on issues |
+| `Attachment` | File uploads linked to issues |
+| `Label` | Categorization labels for issues |
+| `Sprint` | Time-boxed planning periods |
+| `IssueLink` | Relationships between issues |
+| `Notification` | User-specific in-app notifications |
+| `ActivityLog` | Append-only audit trail of system actions |
+| `AutomationRule` | Configurable automation definitions |
 
-- [ ] Email & push notifications
-- [ ] Issue templates and bulk import
-- [ ] Sprint / milestone planning view
-- [ ] Saved filters and personal dashboards
-- [ ] Webhook integrations (Slack, Discord)
-- [ ] Rate-limited public API keys for integrations
-- [ ] Docker Compose for one-command deployment
+## Testing & Code Quality
 
----
-
-## 🤝 Contributing
-
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Commit your changes with conventional messages.
-4. Push the branch and open a Pull Request.
-
-Please run before submitting:
+### Backend
 
 ```bash
-# Backend
-cd backend && composer pint && php artisan test
+cd backend
 
-# Frontend
-cd frontend && npm run lint && npm run build
+# Run PHPUnit tests
+php artisan test
+
+# Format code with Laravel Pint
+./vendor/bin/pint
 ```
 
----
+### Frontend
 
-## 📄 License
+```bash
+cd frontend
 
-This project is released under the **MIT License**. See [`LICENSE`](LICENSE) for details.
+# Lint with ESLint
+npm run lint
 
----
+# Format with Prettier
+npm run format
 
-## 👤 Author
+# Production build check
+npm run build
+```
 
-**alsakib748** — [github.com/alsakib748](https://github.com/alsakib748)
+## Security
 
-Built with Laravel 13, Vue 3, and a great deal of coffee ☕.
+- **Environment Safety** – Never commit `.env` files or sensitive credentials. Use `.env.example` as a template.
+- **Authentication** – All protected routes require valid Sanctum authentication.
+- **Authorization** – Policies and permissions are enforced on all sensitive resources.
+- **WebSocket Security** – Private channel subscriptions are authorized server-side.
+- **Webhooks** – GitHub webhooks are verified with HMAC signatures.
+- **File Uploads** – Validate and restrict uploaded files according to your security requirements.
+- **Production Hardening** – Set `APP_DEBUG=false`, use HTTPS, restrict admin access, and keep dependencies updated.
+- **Vulnerability Reporting** – If you discover a security issue, please report it privately by opening a security advisory on GitHub rather than creating a public issue.
+
+## Roadmap
+
+- [ ] Email and push notification support
+- [ ] Issue templates and bulk import/export (CSV/JSON)
+- [ ] Advanced saved filters and personalized dashboards
+- [ ] Additional webhook integrations (Slack, Discord, Microsoft Teams)
+- [ ] API key management for external integrations
+- [ ] Docker and Docker Compose for one-command deployment
+- [ ] Enhanced reporting and data export capabilities
+- [ ] Dark mode refinements and accessibility improvements
+
+## Contributing
+
+Contributions are welcome! To get started:
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/your-feature-name`
+3. **Commit** your changes with clear, descriptive messages
+4. **Test** your changes with linting and tests
+5. **Push** to your branch and open a **Pull Request**
+
+Please follow the existing code style, add tests where appropriate, and update documentation if your changes affect setup or usage. For significant changes, open an issue first to discuss your proposal.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Author
+
+**alsakib748** – [GitHub](https://github.com/alsakib748)
+
+Built with Laravel, Vue, and a focus on practical, real-world engineering workflows.

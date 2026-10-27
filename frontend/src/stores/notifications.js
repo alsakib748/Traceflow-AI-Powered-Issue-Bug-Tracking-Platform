@@ -38,8 +38,10 @@ export const useNotificationStore = defineStore('notifications', {
     async fetchNotifications(page = 1, append = false) {
       this.loading = true
       try {
-        // const response = await api.get('/api/notifications/', { params: { page } })
-        const response = await api.get('/notifications/', { params: { page } })
+        // const response = await api.get('/notifications/', { params: { page } })
+        const response = await api.get('/notifications', {
+          params: { page },
+        })
         if (append) {
           this.notifications = [...this.notifications, ...response.data.data]
         } else {

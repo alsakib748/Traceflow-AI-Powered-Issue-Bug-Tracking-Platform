@@ -53,7 +53,7 @@
                   </span>
                   <span v-if="isExpanded || isHovered || isMobileOpen" class="menu-item-text">{{
                     item.name
-                  }}</span>
+                    }}</span>
                   <ChevronDownIcon v-if="isExpanded || isHovered || isMobileOpen" :class="[
                     'ml-auto w-5 h-5 transition-transform duration-200',
                     {
@@ -75,7 +75,7 @@
                   </span>
                   <span v-if="isExpanded || isHovered || isMobileOpen" class="menu-item-text">{{
                     item.name
-                  }}</span>
+                    }}</span>
                   <span v-if="badgeFor(item) && (isExpanded || isHovered || isMobileOpen)"
                     class="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-medium rounded-full bg-brand-500 text-white">
                     {{ badgeFor(item) }}
